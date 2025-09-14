@@ -7,14 +7,11 @@ import io.github.afamiliarquiet.be_a_doll.letters.IntraLibraryMessageCacheLetter
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentSyncPredicate;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextCodecs;
-import net.minecraft.util.Unit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import symbolics.division.occmy.obv.OccEntities;
 
 @SuppressWarnings("UnstableApiUsage")
 public class BeALibrarian {
@@ -75,13 +72,13 @@ public class BeALibrarian {
 		doll.setAttached(DOLL_VARIANT, variant);
 
 		// special compat treat for clockwork dolls
-		if (FabricLoader.getInstance().isModLoaded("occmy")) {
-			if (variant == BeADoll.Variant.CLOCKWORK) {
-				doll.setAttached(OccEntities.ENJOINED, Unit.INSTANCE);
-			} else {
-				doll.removeAttached(OccEntities.ENJOINED);
-			}
-		}
+//		if (FabricLoader.getInstance().isModLoaded("occmy")) {
+//			if (variant == BeADoll.Variant.CLOCKWORK) {
+//				doll.setAttached(OccEntities.ENJOINED, Unit.INSTANCE);
+//			} else {
+//				doll.removeAttached(OccEntities.ENJOINED);
+//			}
+//		}
 	}
 
 	public static @Nullable Text inspectDollLabel(@NotNull PlayerEntity doll) {
@@ -94,11 +91,11 @@ public class BeALibrarian {
 
 	public static void repress(@NotNull PlayerEntity player) {
 		// clean up special compat treat
-		if (FabricLoader.getInstance().isModLoaded("occmy")) {
-			if (inspectDollMaterial(player) == BeADoll.Variant.CLOCKWORK) {
-				player.removeAttached(OccEntities.ENJOINED);
-			}
-		}
+//		if (FabricLoader.getInstance().isModLoaded("occmy")) {
+//			if (inspectDollMaterial(player) == BeADoll.Variant.CLOCKWORK) {
+//				player.removeAttached(OccEntities.ENJOINED);
+//			}
+//		}
 
 		player.removeAttached(DOLL_VARIANT);
 		player.removeAttached(DOLL_NAME);

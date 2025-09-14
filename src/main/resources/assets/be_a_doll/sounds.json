@@ -1,17 +1,17 @@
 {
 	"item.be_a_doll.ribbon.tied": {
 		"sounds": [
-			"entity/leashknot/leash1",
-			"entity/leashknot/leash2",
-			"entity/leashknot/leash3"
+			"entity/leashknot/place1",
+			"entity/leashknot/place2",
+			"entity/leashknot/place3"
 		],
 		"subtitle": "subtitles.item.be_a_doll.ribbon.tied"
 	},
 	"item.be_a_doll.ribbon.untied": {
 		"sounds": [
-			"entity/leashknot/unleash1",
-			"entity/leashknot/unleash2",
-			"entity/leashknot/unleash3"
+			"entity/leashknot/break1",
+			"entity/leashknot/break2",
+			"entity/leashknot/break3"
 		],
 		"subtitle": "subtitles.item.be_a_doll.ribbon.untied"
 	},
@@ -66,9 +66,30 @@
 	},
 	"entity.be_a_doll.doll.care.plastic": {
 		"sounds": [
-			"block/resin_bricks/resin_brick_hit1",
-			"block/resin_bricks/resin_brick_hit3",
-			"block/resin_bricks/resin_brick_hit4"
+			{
+				"name": "block/bamboo/place1",
+				"volume": 0.8
+			},
+			{
+				"name": "block/bamboo/place2",
+				"volume": 0.8
+			},
+			{
+				"name": "block/bamboo/place3",
+				"volume": 0.8
+			},
+			{
+				"name": "block/bamboo/place4",
+				"volume": 0.8
+			},
+			{
+				"name": "block/bamboo/place5",
+				"volume": 0.8
+			},
+			{
+				"name": "block/bamboo/place6",
+				"volume": 0.8
+			}
 		],
 		"subtitle": "subtitles.entity.be_a_doll.doll.care.plastic"
 	},

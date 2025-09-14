@@ -1,7 +1,5 @@
 package io.github.afamiliarquiet.be_a_doll.mixin.synthetic_treats;
 
-import com.llamalad7.mixinextras.expression.Definition;
-import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.afamiliarquiet.be_a_doll.BeAMaid;
@@ -22,9 +20,7 @@ public class SyntheticDeathMessagesDamageSourceMixin {
 	@Final
 	private RegistryEntry<DamageType> type;
 
-	@Definition(id = "msgId", method = "Lnet/minecraft/entity/damage/DamageType;msgId()Ljava/lang/String;")
-	@Expression("?.msgId()")
-	@ModifyExpressionValue(method = "getDeathMessage", at = @At("MIXINEXTRAS:EXPRESSION"))
+	@ModifyExpressionValue(method = "getDeathMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageType;msgId()Ljava/lang/String;"))
 	private String addDollQualifierIfIWant(String original, @Local(argsOnly = true) LivingEntity killed) {
 		if (killed instanceof PlayerEntity beWaryOfDoll && BeAMaid.isDoll(beWaryOfDoll)) {
 			if (type.isIn(BeAResearcher.DOLL_MODIFIES_MESSAGE)) {

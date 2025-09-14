@@ -19,7 +19,7 @@ public class BeAWitch {
 		Registries.STATUS_EFFECT,
 		BeADoll.id("cared_for"),
 		new AbsorptionStatusEffect(StatusEffectCategory.BENEFICIAL, 0xb0b8dd)
-			.addAttributeModifier(EntityAttributes.MAX_ABSORPTION, BeADoll.id("effect.cared_for"), 14.0, EntityAttributeModifier.Operation.ADD_VALUE)
+			.addAttributeModifier(EntityAttributes.GENERIC_MAX_ABSORPTION, BeADoll.id("effect.cared_for"), 14.0, EntityAttributeModifier.Operation.ADD_VALUE)
 	);
 
 	public static final RegistryEntry<StatusEffect> FRAGMENTED = Registry.registerReference(

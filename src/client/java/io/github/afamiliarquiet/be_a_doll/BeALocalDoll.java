@@ -7,6 +7,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.item.ModelPredicateProviderRegistry;
 
 public class BeALocalDoll implements ClientModInitializer {
 	public static final BeALocalTinkerer CLIENT_CONFIG = BeALocalTinkerer.createToml(FabricLoader.getInstance().getConfigDir(), "", BeADoll.MOD_ID, BeALocalTinkerer.class);
@@ -16,6 +17,13 @@ public class BeALocalDoll implements ClientModInitializer {
 		// This entrypoint is suitable for setting up client-specific logic, such as rendering.
 		BeALocalPenPal.fillPen();
 		BeALocalBug.lookAtBug();
+
+		ModelPredicateProviderRegistry.register(
+			BeADoll.id("caring"),
+			((stack, world, entity, seed) ->
+				entity != null && entity.getActiveItem() == stack ? 1f : 0f
+			)
+		);
 
 		ClientTickEvents.START_CLIENT_TICK.register((client -> {
 			if (CLIENT_CONFIG.dirty) {

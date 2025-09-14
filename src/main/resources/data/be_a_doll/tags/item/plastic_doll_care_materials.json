@@ -1,6 +1,6 @@
 {
 	"values": [
-		"minecraft:resin_brick",
+		"minecraft:dried_kelp",
 		{"id": "mr_scoot:plastic_granules", "required": false},
 		{"id": "toy_bricks:plastic_brick", "required": false},
 		{"id": "toy_bricks:white_toy_brick", "required": false},

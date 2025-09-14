@@ -6,20 +6,21 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class DollsMustDropServerPlayerEntityMixin extends PlayerEntity {
-	public DollsMustDropServerPlayerEntityMixin(World world, GameProfile profile) {
-		super(world, profile);
+
+	public DollsMustDropServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
+		super(world, pos, yaw, gameProfile);
 	}
 
 	@Inject(method = "changeGameMode", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;dropShoulderEntities()V"))
@@ -28,13 +29,6 @@ public abstract class DollsMustDropServerPlayerEntityMixin extends PlayerEntity 
 		if (!passengers.isEmpty()) {
 			ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, new S2CDollDismountLetter(passengers.stream().map(Entity::getId).toList()));
 			this.removeAllPassengers();
-		}
-	}
-
-	@Inject(method = "dismountVehicle", at = @At("HEAD"))
-	private void letGoOfIt(CallbackInfo ci) {
-		if (this.getVehicle() instanceof ServerPlayerEntity serverPlayerMount) {
-			ServerPlayNetworking.send(serverPlayerMount, new S2CDollDismountLetter(List.of(this.getId())));
 		}
 	}
 }

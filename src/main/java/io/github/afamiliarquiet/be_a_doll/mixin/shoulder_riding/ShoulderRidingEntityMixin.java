@@ -1,7 +1,5 @@
 package io.github.afamiliarquiet.be_a_doll.mixin.shoulder_riding;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import io.github.afamiliarquiet.be_a_doll.BeADecoration;
 import io.github.afamiliarquiet.be_a_doll.BeAMaid;
 import net.minecraft.entity.Entity;
@@ -50,15 +48,17 @@ public abstract class ShoulderRidingEntityMixin {
 		}
 	}
 
-	// `this` is the doll
-	@ModifyExpressionValue(method = "startRiding(Lnet/minecraft/entity/Entity;Z)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityType;isSaveable()Z"))
-	private boolean forDirtsSakeJustLetMeRideOtherPlayers(boolean original, @Local(argsOnly = true) Entity mount) {
-		// i've seen you do this before intellij. and you've gotta stop it
-		//noinspection ConstantValue
-		if (mount instanceof PlayerEntity && (Object)this instanceof PlayerEntity doll && BeAMaid.isDoll(doll)) {
-			return true;
-		} else {
-			return original;
-		}
-	}
+	// todone - verify that this isn't necessary? can i just ride players now without fighting minecraft?
+	// yeah seems so. i guess 1.21.8 or somewhereabouts decided players riding players is illegal.
+//	// `this` is the doll
+//	@ModifyExpressionValue(method = "startRiding(Lnet/minecraft/entity/Entity;Z)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityType;isSaveable()Z"))
+//	private boolean forDirtsSakeJustLetMeRideOtherPlayers(boolean original, @Local(argsOnly = true) Entity mount) {
+//		// i've seen you do this before intellij. and you've gotta stop it
+//		//noinspection ConstantValue
+//		if (mount instanceof PlayerEntity && (Object)this instanceof PlayerEntity doll && BeAMaid.isDoll(doll)) {
+//			return true;
+//		} else {
+//			return original;
+//		}
+//	}
 }

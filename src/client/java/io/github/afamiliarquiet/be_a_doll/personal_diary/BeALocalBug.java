@@ -47,9 +47,9 @@ public class BeALocalBug {
 
 		@Override
 		public void tick() {
-			this.lastX = this.x;
-			this.lastY = this.y;
-			this.lastZ = this.z;
+			this.prevPosX = this.x;
+			this.prevPosY = this.y;
+			this.prevPosZ = this.z;
 			if (this.age++ >= this.maxAge) {
 				this.markDead();
 			} else {
@@ -58,13 +58,13 @@ public class BeALocalBug {
 				this.velocityX = this.velocityX * this.velocityMultiplier;
 				this.velocityY = this.velocityY * this.velocityMultiplier;
 				this.velocityZ = this.velocityZ * this.velocityMultiplier;
-				setColorSimpler(ColorHelper.lerp((float)this.age / this.maxAge, this.fromColor, this.toColor));
+				setColorSimpler(ColorHelper.Argb.lerp((float)this.age / this.maxAge, this.fromColor, this.toColor));
 			}
 		}
 
 		private void setColorSimpler(int color) {
-			this.setColor(ColorHelper.getRed(color) / 255.0F, ColorHelper.getGreen(color) / 255.0F, ColorHelper.getBlue(color) / 255.0F);
-			this.setAlpha(ColorHelper.getAlpha(color) / 255.0F);
+			this.setColor(ColorHelper.Argb.getRed(color) / 255.0F, ColorHelper.Argb.getGreen(color) / 255.0F, ColorHelper.Argb.getBlue(color) / 255.0F);
+			this.setAlpha(ColorHelper.Argb.getAlpha(color) / 255.0F);
 		}
 
 		@Override

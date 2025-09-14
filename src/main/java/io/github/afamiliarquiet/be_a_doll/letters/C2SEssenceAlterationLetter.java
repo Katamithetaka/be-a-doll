@@ -14,7 +14,7 @@ public record C2SEssenceAlterationLetter(boolean inserting) implements CustomPay
 	public static final CustomPayload.Id<C2SEssenceAlterationLetter> ID = new CustomPayload.Id<>(BeADoll.id("essence_alteration_letter"));
 
 	public static final PacketCodec<ByteBuf, C2SEssenceAlterationLetter> PACKET_CODEC = PacketCodec.tuple(
-		PacketCodecs.BOOLEAN,
+		PacketCodecs.BOOL,
 		C2SEssenceAlterationLetter::inserting,
 		C2SEssenceAlterationLetter::new
 	);

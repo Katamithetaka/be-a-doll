@@ -6,7 +6,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +19,7 @@ public abstract class SyntheticResistancePlayerEntityMixin extends LivingEntity 
 	}
 
 	@Inject(method = "isInvulnerableTo", at = @At("HEAD"), cancellable = true)
-	private void dollsAreImmuneToDrowningAndFreezing(ServerWorld world, DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+	private void dollsAreImmuneToDrowningAndFreezing(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
 		if (BeAMaid.isDoll((PlayerEntity)(Object)this)) { // full metal alchemist..
 			if (source.isIn(BeAResearcher.DOLL_IMMUNE)) {
 				cir.setReturnValue(true);

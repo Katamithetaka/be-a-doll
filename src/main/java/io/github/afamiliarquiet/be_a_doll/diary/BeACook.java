@@ -1,10 +1,12 @@
 package io.github.afamiliarquiet.be_a_doll.diary;
 
 import io.github.afamiliarquiet.be_a_doll.BeADoll;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.recipe.input.CraftingRecipeInput;
 import net.minecraft.registry.Registries;
@@ -15,7 +17,7 @@ import net.minecraft.world.World;
 
 public class BeACook {
 	// this can probably? move with the recipe if it ever moves
-	public static final RecipeSerializer<EssenceArtistryRecipe> ESSENCE_ARTISTRY_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, BeADoll.id("crafting_special_essenceartistry"), new SpecialCraftingRecipe.SpecialRecipeSerializer<>(EssenceArtistryRecipe::new));
+	public static final RecipeSerializer<EssenceArtistryRecipe> ESSENCE_ARTISTRY_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, BeADoll.id("crafting_special_essenceartistry"), new SpecialRecipeSerializer<>(EssenceArtistryRecipe::new));
 
 	public static void placeOrders() {
 		// hi im here to alter your essence. what can i get for you today?
@@ -36,7 +38,7 @@ public class BeACook {
 				boolean hasOneEssenceFragment = false;
 				boolean hasOneDollcraftItem = false;
 
-				for (int i = 0; i < input.size(); i++) {
+				for (int i = 0; i < input.getSize(); i++) {
 					ItemStack current = input.getStackInSlot(i);
 					if (!current.isEmpty()) {
 						if (current.isIn(BeAResearcher.DOLLCRAFT_ITEMS) || current.isOf(Items.DIAMOND_PICKAXE)) {
@@ -67,7 +69,7 @@ public class BeACook {
 			BeADoll.Variant dollVariant = null;
 			ItemStack essenceFragment = ItemStack.EMPTY;
 
-			for (int i = 0; i < input.size(); i++) {
+			for (int i = 0; i < input.getSize(); i++) {
 				ItemStack current = input.getStackInSlot(i);
 				if (!current.isEmpty()) {
 					if (current.isOf(BeACollector.ESSENCE_FRAGMENT)) {
@@ -105,14 +107,14 @@ public class BeACook {
 		}
 
 		@Override
-		public DefaultedList<ItemStack> getRecipeRemainders(CraftingRecipeInput input) {
-			DefaultedList<ItemStack> remainders = DefaultedList.ofSize(input.size(), ItemStack.EMPTY);
+		public DefaultedList<ItemStack> getRemainder(CraftingRecipeInput input) {
+			DefaultedList<ItemStack> remainders = DefaultedList.ofSize(input.getSize(), ItemStack.EMPTY);
 
 			for (int i = 0; i < remainders.size(); i++) {
 				ItemStack current = input.getStackInSlot(i);
-				ItemStack weirdAndUnlikelyRemainder = current.getItem().getRecipeRemainder();
-				if (!weirdAndUnlikelyRemainder.isEmpty()) {
-					remainders.set(i, weirdAndUnlikelyRemainder);
+				Item weirdAndUnlikelyRemainder = current.getItem().getRecipeRemainder();
+				if (weirdAndUnlikelyRemainder != null) {
+					remainders.set(i, new ItemStack(weirdAndUnlikelyRemainder));
 				} else if (current.isIn(BeAResearcher.DOLLCRAFT_ITEMS) || current.isOf(Items.DIAMOND_PICKAXE)) {
 					remainders.set(i, current.copyWithCount(1));
 					break;
@@ -125,6 +127,11 @@ public class BeACook {
 		@Override
 		public RecipeSerializer<? extends SpecialCraftingRecipe> getSerializer() {
 			return BeACook.ESSENCE_ARTISTRY_SERIALIZER;
+		}
+
+		@Override
+		public boolean fits(int width, int height) {
+			return width * height >= 2;
 		}
 	}
 }

@@ -73,13 +73,13 @@ public class BeADecoration {
 				Direction sleepingDirection = playerMount.getSleepingDirection();
 				if (sleepingDirection != null) { // should always be true but i'm not the assertive type
 					attachmentPos = attachmentPos.rotateY(playerMount.bodyYaw * (float) (Math.PI / 180.0));
-					attachmentPos = attachmentPos.rotateY((sleepingDirection.getPositiveHorizontalDegrees() + 180) * (float) (Math.PI / 180.0));
+					attachmentPos = attachmentPos.rotateY((sleepingDirection.asRotation() + 180) * (float) (Math.PI / 180.0));
 				}
 				break;
 			case SWIMMING:
 				attachmentPos = attachmentPos.add(new Vec3d(0, 0.15, -1).multiply(scaleFactor));
 			case SPIN_ATTACK:
-			case GLIDING:
+			case FALL_FLYING:
 				attachmentPos = attachmentPos.add(new Vec3d(0, -0.5, 1.5).multiply(scaleFactor));
 				attachmentPos = attachmentPos.rotateX(-playerMount.getPitch() * (float) (Math.PI / 180.0));
 				break;

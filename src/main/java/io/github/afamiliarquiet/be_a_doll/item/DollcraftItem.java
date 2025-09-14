@@ -9,15 +9,12 @@ import io.github.afamiliarquiet.be_a_doll.diary.BeAWitch;
 import io.github.afamiliarquiet.be_a_doll.letters.S2CDollRepairedLetter;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.UseCooldownComponent;
-import net.minecraft.component.type.WeaponComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.consume.UseAction;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -25,6 +22,8 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -32,18 +31,18 @@ import net.minecraft.world.World;
 import java.util.function.Predicate;
 
 public class DollcraftItem extends Item {
+	public static final int USE_COOLDOWN = 26;
 
 	public DollcraftItem(Settings settings) {
-		super(settings.useCooldown(1.3f)
-			.component(DataComponentTypes.WEAPON, new WeaponComponent(1)));
+		super(settings);
 	}
 
 	// care for self
 	@Override
-	public ActionResult use(World world, PlayerEntity user, Hand hand) {
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		if (BeAMaid.isDoll(user) && !findCareMaterial(user, user).isEmpty()) {
 			user.setCurrentHand(hand);
-			return ActionResult.CONSUME;
+			return TypedActionResult.consume(user.getActiveItem());
 		}
 
 		return super.use(world, user, hand);
@@ -92,13 +91,13 @@ public class DollcraftItem extends Item {
 	// care for other
 	@Override
 	public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-		if (entity instanceof PlayerEntity doll && !user.getItemCooldownManager().isCoolingDown(stack)) {
+		if (entity instanceof PlayerEntity doll && !user.getItemCooldownManager().isCoolingDown(stack.getItem())) {
 			ActionResult careResult = performCare(user, doll, stack, hand, true);
 			if (careResult.isAccepted()) {
-				UseCooldownComponent cooldownComponent = stack.get(DataComponentTypes.USE_COOLDOWN);
-				if (cooldownComponent != null) {
-					cooldownComponent.set(stack, user);
-				}
+//				UseCooldownComponent cooldownComponent = stack.get(DataComponentTypes.USE_COOLDOWN);
+//				if (cooldownComponent != null) {
+//					cooldownComponent.set(stack, user);
+//				}
 
 				return careResult;
 			}
@@ -129,6 +128,7 @@ public class DollcraftItem extends Item {
 				caringIsCaring(doll);
 				material.split(1);
 				dollcraftStack.damage(1, user, LivingEntity.getSlotForHand(hand));
+				user.getItemCooldownManager().set(dollcraftStack.getItem(), USE_COOLDOWN);
 				return ActionResult.SUCCESS;
 			}
 		}
@@ -181,11 +181,16 @@ public class DollcraftItem extends Item {
 			);
 			pos = pos.add(dollHouse.getMinPos());
 
-			doll.getWorld().addParticleClient(new ItemStackParticleEffect(ParticleTypes.ITEM, material), pos.x, pos.y, pos.z, vel.x, vel.y + 0.05, vel.z);
+			doll.getWorld().addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, material), pos.x, pos.y, pos.z, vel.x, vel.y + 0.05, vel.z);
 		}
 	}
 
 	public BeADoll.Variant getVariant() {
 		return getComponents().getOrDefault(BeACollector.DOLL_VARIANT_COMPONENT, BeADoll.Variant.DEFAULT);
+	}
+
+	@Override
+	public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+		return ingredient.isOf(Items.IRON_NUGGET); // hardcoded because backporting laziness
 	}
 }

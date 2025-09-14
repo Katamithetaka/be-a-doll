@@ -3,3 +3,5 @@ accessWidener v2 named
 accessible class net/minecraft/entity/effect/AbsorptionStatusEffect
 accessible method net/minecraft/entity/effect/AbsorptionStatusEffect <init> (Lnet/minecraft/entity/effect/StatusEffectCategory;I)V
 accessible class net/minecraft/client/gui/hud/InGameHud$HeartType
+
+accessible method net/minecraft/component/type/FoodComponent$StatusEffectEntry <init> (Lnet/minecraft/entity/effect/StatusEffectInstance;F)V

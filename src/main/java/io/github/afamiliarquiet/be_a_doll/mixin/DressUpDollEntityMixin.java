@@ -29,19 +29,19 @@ public abstract class DressUpDollEntityMixin {
 			if (thatGrabbyPlayer.isSpectator()) {
 				cir.setReturnValue(ActionResult.SUCCESS);
 			} else if (thatGrabbyPlayer.getWorld().isClient) {
-				cir.setReturnValue(ActionResult.SUCCESS_SERVER);
+				cir.setReturnValue(ActionResult.SUCCESS);
 			} else {
 				EquipmentSlot preferredSlot = thisDoll.getPreferredEquipmentSlot(itemStack);
 				// because players don't normally get equipped i need to add this next line (player is missing some filters)
-				preferredSlot = preferredSlot != EquipmentSlot.BODY && preferredSlot != EquipmentSlot.SADDLE ? preferredSlot : EquipmentSlot.MAINHAND;
+				preferredSlot = preferredSlot != EquipmentSlot.BODY ? preferredSlot : EquipmentSlot.MAINHAND;
 				if (itemStack.isEmpty()) {
 					EquipmentSlot aimedSlot = this.be_a_doll$getSlotFromPosition(thisDoll, hitPos);
 					if (thisDoll.hasStackEquipped(aimedSlot) && this.be_a_doll$equip(thisDoll, thatGrabbyPlayer, aimedSlot, itemStack, hand)) {
-						cir.setReturnValue(ActionResult.SUCCESS_SERVER);
+						cir.setReturnValue(ActionResult.SUCCESS);
 					}
 				} else {
 					if (this.be_a_doll$equip(thisDoll, thatGrabbyPlayer, preferredSlot, itemStack, hand)) {
-						cir.setReturnValue(ActionResult.SUCCESS_SERVER);
+						cir.setReturnValue(ActionResult.SUCCESS);
 					}
 				}
 			}

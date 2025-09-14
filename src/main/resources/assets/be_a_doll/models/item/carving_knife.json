@@ -24,5 +24,13 @@
 			"translation": [ 1.13, 3.2, 1.13 ],
 			"scale": [ 0.68, 0.68, 0.68 ]
 		}
-	}
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"be_a_doll:caring": 1
+			},
+			"model": "be_a_doll:item/carving_knife_caring"
+		}
+	]
 }

@@ -1,14 +1,12 @@
 package io.github.afamiliarquiet.be_a_doll.mixin.client;
 
-import com.llamalad7.mixinextras.expression.Definition;
-import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import io.github.afamiliarquiet.be_a_doll.BeADoll;
-import io.github.afamiliarquiet.be_a_doll.diary.BeACurator;
 import io.github.afamiliarquiet.be_a_doll.BeAMaid;
+import io.github.afamiliarquiet.be_a_doll.diary.BeACurator;
 import io.github.afamiliarquiet.be_a_doll.diary.BeALibrarian;
 import io.github.afamiliarquiet.be_a_doll.diary.BeAWitch;
 import net.minecraft.client.MinecraftClient;
@@ -42,10 +40,8 @@ public class DollRetexturedInGameHudMixin {
 		}
 	}
 
-	@Definition(id = "getTexture", method = "Lnet/minecraft/client/gui/hud/InGameHud$HeartType;getTexture(ZZZ)Lnet/minecraft/util/Identifier;")
-	@Expression("?.getTexture(?, ?, ?)")
-	@ModifyExpressionValue(method = "drawHeart", at = @At("MIXINEXTRAS:EXPRESSION"))
-	private Identifier alterAbsorptitonTexture(Identifier original, @Local(argsOnly = true) InGameHud.HeartType heartType, @Local(argsOnly = true, ordinal = 0) boolean hardcore, @Local(argsOnly = true, ordinal = 2) boolean half) {
+	@ModifyExpressionValue(method = "drawHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud$HeartType;getTexture(ZZZ)Lnet/minecraft/util/Identifier;"))
+	private Identifier alterAbsorptionTexture(Identifier original, @Local(argsOnly = true) InGameHud.HeartType heartType, @Local(argsOnly = true, ordinal = 0) boolean hardcore, @Local(argsOnly = true, ordinal = 2) boolean half) {
 		if (heartType == InGameHud.HeartType.ABSORBING && BeAMaid.isDoll(MinecraftClient.getInstance().player)) {
 			if (half) {
 				if (hardcore) {
@@ -65,24 +61,20 @@ public class DollRetexturedInGameHudMixin {
 		}
 	}
 
-	@Definition(id = "hasStatusEffect", method = "Lnet/minecraft/entity/player/PlayerEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z")
-	@Expression("?.hasStatusEffect(?)")
-	@ModifyExpressionValue(method = "renderStatusBars", at = @At("MIXINEXTRAS:EXPRESSION"))
+	@ModifyExpressionValue(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"))
 	private boolean orOverflowing(boolean original, @Local(name = "playerEntity", ordinal = 0) PlayerEntity player) {
 		return original || player.hasStatusEffect(BeAWitch.OVERFLOWING);
 	}
 
-	@Definition(id = "getSaturationLevel", method = "Lnet/minecraft/entity/player/HungerManager;getSaturationLevel()F")
-	@Expression("?.getSaturationLevel() <= ?")
-	@ModifyExpressionValue(method = "renderFood", at = @At("MIXINEXTRAS:EXPRESSION"))
-	private boolean resaturatingWave(boolean original, @Local(argsOnly = true) PlayerEntity player, @Local(name="j", ordinal = 3) int index, @Local(name="k", ordinal = 4) LocalIntRef yPos) {
+	@ModifyExpressionValue(method = "renderFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;getSaturationLevel()F"))
+	private float resaturatingWave(float original, @Local(argsOnly = true) PlayerEntity player, @Local(name="j", ordinal = 3) int index, @Local(name="k", ordinal = 4) LocalIntRef yPos) {
 		if (player.hasStatusEffect(BeAWitch.OVERFLOWING) && BeAMaid.isDoll(player)) {
 			// if i was a super optimizer i could put the ticks % 15 outside the for loop.
 			if (index == this.ticks % 25) {
 				yPos.set(yPos.get() - 2);
 			}
 
-			return false; // basically cancels the if statement for random bobs
+			return 1f; // basically cancels the if statement for random bobs
 		} else {
 			return original;
 		}

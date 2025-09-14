@@ -6,7 +6,6 @@ import io.github.afamiliarquiet.be_a_doll.mixin.synthetic_treats.FoxEntityTrustI
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.LazyEntityReference;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Tameable;
 import net.minecraft.entity.passive.FoxEntity;
@@ -14,8 +13,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Direction;
@@ -53,11 +54,11 @@ public class RibbonItem extends Item {
 			// ohh.. so the user was the doll!
 			boolean shouldRide = false;
 			if (entity instanceof Tameable tameable) {
-				LazyEntityReference<LivingEntity> ownerRef = tameable.getOwnerReference();
-				if (ownerRef != null && ownerRef.uuidEquals(user) && entity.getWidth() > user.getWidth()) {
+				LivingEntity ownerRef = tameable.getOwner();
+				if (ownerRef != null && ownerRef.getUuid().equals(user.getUuid()) && entity.getWidth() > user.getWidth()) {
 					shouldRide = true;
 				}
-			} else if (entity instanceof FoxEntity foxesAreSoCool && ((FoxEntityTrustInvoker)foxesAreSoCool).invokeCanTrust(user)) {
+			} else if (entity instanceof FoxEntity foxesAreSoCool && ((FoxEntityTrustInvoker)foxesAreSoCool).invokeCanTrust(user.getUuid())) {
 				shouldRide = true;
 			}
 
@@ -71,7 +72,7 @@ public class RibbonItem extends Item {
 	}
 
 	@Override
-	public ActionResult use(World world, PlayerEntity user, Hand hand) {
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		// yeah no lol. did you not see the C2SDollDismountLetter i had to make? client's gotta hear about this
 		if (/*!user.getWorld().isClient && */!user.getPassengerList().isEmpty() && user.shouldCancelInteraction()) {
 //			user.removeAllPassengers();
@@ -79,17 +80,16 @@ public class RibbonItem extends Item {
 			BlockHitResult blockHitResult = raycast(world, user, RaycastContext.FluidHandling.NONE);
 			Vec3d pos;
 			// fear my mega if statement of doom! it could be worse. i'm just being a little bit silly with it.
+			doll.stopRiding();
 			if (!world.isClient()
 				&& blockHitResult.getType() == HitResult.Type.BLOCK
 				&& doll instanceof ServerPlayerEntity serverPlayerEntity
 				&& (pos = getDollPlacementPos(blockHitResult, doll)) != null
 			) {
-				serverPlayerEntity.teleportTo(new TeleportTarget(serverPlayerEntity.getWorld(), pos, Vec3d.ZERO, user.getYaw() + 180, user.getPitch() * -1, TeleportTarget.NO_OP));
-			} else {
-				doll.stopRiding();
+				serverPlayerEntity.teleportTo(new TeleportTarget((ServerWorld) serverPlayerEntity.getWorld(), pos, Vec3d.ZERO, user.getYaw() + 180, user.getPitch() * -1, TeleportTarget.NO_OP));
 			}
 			user.playSound(BeABirdwatcher.RAVEN_CRY, 1f, 1f);
-			return ActionResult.SUCCESS;
+			return TypedActionResult.success(user.getStackInHand(hand));
 		} else {
 			return super.use(world, user, hand);
 		}

@@ -8,7 +8,6 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.server.world.ServerWorld;
 
 public class OverflowingStatusEffect extends StatusEffect {
 	public OverflowingStatusEffect(StatusEffectCategory category, int color) {
@@ -20,7 +19,7 @@ public class OverflowingStatusEffect extends StatusEffect {
 	}
 
 	@Override
-	public boolean applyUpdateEffect(ServerWorld world, LivingEntity entity, int amplifier) {
+	public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
 		if (entity instanceof PlayerEntity playerEntity) {
 			if (BeAMaid.isDoll(playerEntity)) { // dolls get a bit of repairs
 				HungerManager hungry = playerEntity.getHungerManager();

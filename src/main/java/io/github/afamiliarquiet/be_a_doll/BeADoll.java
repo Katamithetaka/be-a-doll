@@ -78,7 +78,7 @@ public class BeADoll implements ModInitializer {
 			BeABirdwatcher.CARE_CLOTH,
 			BeACurator.CLOTH_FOOD_EMPTY, BeACurator.CLOTH_FOOD_HALF, BeACurator.CLOTH_FOOD_FULL),
 		PLASTIC(4, "plastic",
-			BeAResearcher.PLASTIC_DOLL_CARE_MATERIALS, Items.RESIN_BRICK,
+			BeAResearcher.PLASTIC_DOLL_CARE_MATERIALS, Items.DRIED_KELP,
 			BeABirdwatcher.CARE_PLASTIC,
 			BeACurator.PLASTIC_FOOD_EMPTY, BeACurator.PLASTIC_FOOD_HALF, BeACurator.PLASTIC_FOOD_FULL),
 		CLOCKWORK(5, "clockwork",
@@ -88,7 +88,7 @@ public class BeADoll implements ModInitializer {
 
 		public static final BeADoll.Variant DEFAULT = WOODEN;
 		public static final StringIdentifiable.EnumCodec<BeADoll.Variant> CODEC = StringIdentifiable.createCodec(BeADoll.Variant::values);
-		private static final IntFunction<BeADoll.Variant> INDEX_MAPPER = ValueLists.createIndexToValueFunction(
+		private static final IntFunction<BeADoll.Variant> INDEX_MAPPER = ValueLists.createIdToValueFunction(
 			BeADoll.Variant::getIndex, values(), ValueLists.OutOfBoundsHandling.ZERO
 		);
 		public static final PacketCodec<ByteBuf, BeADoll.Variant> PACKET_CODEC = PacketCodecs.indexed(INDEX_MAPPER, BeADoll.Variant::getIndex);

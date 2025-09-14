@@ -2,5 +2,13 @@
 	"parent": "minecraft:item/handheld",
 	"textures": {
 		"layer0": "be_a_doll:item/flush_cutter"
-	}
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"be_a_doll:caring": 1
+			},
+			"model": "be_a_doll:item/flush_cutter_caring"
+		}
+	]
 }

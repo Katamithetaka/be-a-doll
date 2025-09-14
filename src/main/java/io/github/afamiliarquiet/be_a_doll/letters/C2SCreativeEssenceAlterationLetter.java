@@ -15,7 +15,7 @@ public record C2SCreativeEssenceAlterationLetter(boolean inserting, ItemStack st
 	public static final Id<C2SCreativeEssenceAlterationLetter> ID = new Id<>(BeADoll.id("creative_essence_alteration_letter"));
 
 	public static final PacketCodec<RegistryByteBuf, C2SCreativeEssenceAlterationLetter> PACKET_CODEC = PacketCodec.tuple(
-		PacketCodecs.BOOLEAN,
+		PacketCodecs.BOOL,
 		C2SCreativeEssenceAlterationLetter::inserting,
 		ItemStack.OPTIONAL_PACKET_CODEC,
 		C2SCreativeEssenceAlterationLetter::statedCursorStack,

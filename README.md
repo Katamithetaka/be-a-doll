@@ -18,7 +18,7 @@ Would you be a doll? I certainly would, so I made this collection of toyful twea
 - dolls can be renamed (only in world) with a nametag (dolls can see their own in f5 too) (this is cleared when you become not-doll)
 - dolls can also rename themselves by throwing the nametag into position (look straight up)
 - dolls are immune to drowning and freezing
-- dolls are sustained by repairs instead of food (use your dollcraft item with sticks/clay/string/resin brick/gold nugget in inventory)
+- dolls are sustained by repairs instead of food (use your dollcraft item with sticks/clay/string/resin brick (or.. dried kelp, if resin doesn't exist?)/gold nugget in inventory)
 - dolls can also be repaired by others with the right tool and material
 
 There's also two potion effects you may see along the way - one's effect is reasonably obvious, and the other makes you hurt more.
